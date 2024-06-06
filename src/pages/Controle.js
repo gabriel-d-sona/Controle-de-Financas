@@ -10,6 +10,7 @@ class Controle extends Component {
         entrada: false,
         saida: false,
         arr: [],
+        btnDisable: true,
     };
 
     componentDidMount() {
@@ -47,7 +48,7 @@ class Controle extends Component {
         this.setState((prevState) => {
             const { descricao, valor, entrada, saida } = prevState;
             const novoItem = {
-                descricao,
+                descricao: descricao.trim() === "" ? "Sem Descrição" : descricao,
                 valor: saida ? `-${valor}` : valor,
                 tipo: entrada ? "entrada" : "saida",
             };
@@ -59,6 +60,7 @@ class Controle extends Component {
                 valor: "",
                 entrada: false,
                 saida: false,
+                btnDisable: true
             };
         }, this.updateQuantities);
     };
@@ -67,6 +69,11 @@ class Controle extends Component {
     handleChange = (event) => {
         const { name, value, type, checked } = event.target;
         this.setState({ [name]: type === "checkbox" ? checked : value });
+        this.setState((prevState) => {
+            const newState = { ...prevState, [name]: value };
+            const isFormValid =  newState !== null;
+            return { ...newState, btnDisable: !isFormValid}
+        })
     };
 
 //diferencia as checkbox
@@ -79,7 +86,7 @@ class Controle extends Component {
     };
 
     render() {
-        const { descricao, valor, quantidade1, quantidade2, total, arr } = this.state;
+        const { descricao, valor, quantidade1, quantidade2, total, arr, btnDisable } = this.state;
         return (
             <div className="controle-page">
                 <div className="tabela-total">
@@ -105,7 +112,7 @@ class Controle extends Component {
                     <label htmlFor="valor">Valor</label>
                     <input
                         id="valor"
-                        type="text"
+                        type="number"
                         name="valor"
                         value={valor}
                         onChange={this.handleChange}
@@ -131,6 +138,7 @@ class Controle extends Component {
                     <button
                         id="btn-adicionar"
                         name="btn-adicionar"
+                        disabled={btnDisable}
                         onClick={this.handleAddClick}
                     >
                         Adicionar
