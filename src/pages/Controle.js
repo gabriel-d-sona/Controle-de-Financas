@@ -2,9 +2,42 @@ import React, { Component } from "react";
 
 class Controle extends Component {
     state = {
+        descricao: "",
+        valor: "",
         quantidade1: "0,00",
         quantidade2: "0,00",
         total: "0,00",
+        entrada: false,
+        saida: false,
+        arr: [],
+    };
+
+    componentDidMount() {
+        const storedArr = localStorage.getItem("meuArr");
+        if (storedArr) {
+            this.setState({ arr: JSON.parse(storedArr) });
+        }
+    }
+
+    handleAddClick = (event) => {
+        event.preventDefault();
+        this.setState((prevState) => {
+            const { descricao, valor, entrada, saida } = prevState;
+            const novoItem = {
+                descricao,
+                valor: saida ? `-${valor}` : valor,
+                tipo: entrada ? "entrada" : "saida",
+            };
+            const arr = [...prevState.arr, novoItem];
+            localStorage.setItem("meuArr", JSON.stringify(arr));
+            return {
+                arr,
+                descricao: "",
+                valor: "",
+                entrada: false,
+                saida: false,
+            };
+        });
     };
 
     handleChange = (event) => {
@@ -14,37 +47,20 @@ class Controle extends Component {
 
     handleRadioChange = (event) => {
         const { value } = event.target;
-        this.setState({ 
+        this.setState({
             entrada: value === "entrada",
-            saida: value === "saida"
-         });
-    }
-
-    handleAddClick = (event) => {
-        event.preventDefault();
-        this.setState((prevState) => {
-            let valorAtualizado =  prevState.valor.trim() ? prevState.valor : "0,00"
-            if (prevState.saida) {
-                valorAtualizado = prevState.valor.trim() ? - prevState.valor : "0,00"
-            }
-            return {
-                quantidade1: valorAtualizado,
-                valor: "",
-            }
+            saida: value === "saida",
         });
     };
 
     render() {
-        const { descricao, valor, quantidade1 } = this.state;
+        const { descricao, valor, quantidade1, arr } = this.state;
         return (
             <div className="controle-page">
                 <div className="tabela-total">
                     <h1>Controle de Finanças</h1>
                     <label className="entrada">Entradas</label>
-                    <h2 
-                        name="quantidade1" 
-                        value={quantidade1}
-                    >
+                    <h2 name="quantidade1" value={quantidade1}>
                         {quantidade1}
                     </h2>
                     <label className="saidas">Saídas</label>
@@ -76,6 +92,7 @@ class Controle extends Component {
                         name="input"
                         value="entrada"
                         onChange={this.handleRadioChange}
+                        checked={this.state.entrada}
                     />
                     <label htmlFor="saida">Saída</label>
                     <input
@@ -84,6 +101,7 @@ class Controle extends Component {
                         name="input"
                         value="saida"
                         onChange={this.handleRadioChange}
+                        checked={this.state.saida}
                     />
                     <button
                         id="btn-adicionar"
@@ -93,6 +111,38 @@ class Controle extends Component {
                         Adicionar
                     </button>
                 </form>
+                <div className="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Tipo</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {arr.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.descricao}</td>
+                                    <td>{item.valor}</td>
+                                    <td>{item.tipo}</td>
+                                    <td>
+                                        <button
+                                            onClick={() => {
+                                                const newArr = arr.filter((_, i) => i !== index);
+                                                this.setState({ arr: newArr });
+                                                localStorage.setItem("meuArr", JSON.stringify(newArr));
+                                            }}
+                                        >
+                                            Excluir
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }
