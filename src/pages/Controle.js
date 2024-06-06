@@ -15,10 +15,33 @@ class Controle extends Component {
     componentDidMount() {
         const storedArr = localStorage.getItem("meuArr");
         if (storedArr) {
-            this.setState({ arr: JSON.parse(storedArr) });
+            const arr = JSON.parse(storedArr);
+            this.setState({ arr }, this.updateQuantities);
         }
     }
 
+// Atualiza as quantidades
+    updateQuantities = () => {
+        const { arr } = this.state;
+        let quantidade1 = 0;
+        let quantidade2 = 0;
+
+        arr.forEach(item => {
+            if (item.tipo === "entrada") {
+                quantidade1 += parseFloat(item.valor.replace(",", "."));
+            } else if (item.tipo === "saida") {
+                quantidade2 += parseFloat(item.valor.replace(",", "."));
+            }
+        });
+
+        this.setState({
+            quantidade1: quantidade1.toFixed(2).replace(".", ","),
+            quantidade2: quantidade2.toFixed(2).replace(".", ","),
+            total: (quantidade1 + quantidade2).toFixed(2).replace(".", ",")
+        });
+    }
+
+//click do botao
     handleAddClick = (event) => {
         event.preventDefault();
         this.setState((prevState) => {
@@ -37,14 +60,16 @@ class Controle extends Component {
                 entrada: false,
                 saida: false,
             };
-        });
+        }, this.updateQuantities);
     };
 
+//da valor e diferencia texto de checkbox
     handleChange = (event) => {
         const { name, value, type, checked } = event.target;
         this.setState({ [name]: type === "checkbox" ? checked : value });
     };
 
+//diferencia as checkbox
     handleRadioChange = (event) => {
         const { value } = event.target;
         this.setState({
@@ -54,7 +79,7 @@ class Controle extends Component {
     };
 
     render() {
-        const { descricao, valor, quantidade1, arr } = this.state;
+        const { descricao, valor, quantidade1, quantidade2, total, arr } = this.state;
         return (
             <div className="controle-page">
                 <div className="tabela-total">
@@ -64,9 +89,9 @@ class Controle extends Component {
                         {quantidade1}
                     </h2>
                     <label className="saidas">Saídas</label>
-                    <h2>Quantidade 2</h2>
+                    <h2>{quantidade2}</h2>
                     <label className="total">Total</label>
-                    <h2>Total</h2>
+                    <h2>{total}</h2>
                 </div>
                 <form>
                     <label htmlFor="descricao">Descrição</label>
@@ -131,7 +156,7 @@ class Controle extends Component {
                                         <button
                                             onClick={() => {
                                                 const newArr = arr.filter((_, i) => i !== index);
-                                                this.setState({ arr: newArr });
+                                                this.setState({ arr: newArr }, this.updateQuantities);
                                                 localStorage.setItem("meuArr", JSON.stringify(newArr));
                                             }}
                                         >
