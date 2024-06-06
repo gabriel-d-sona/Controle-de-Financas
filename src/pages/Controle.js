@@ -2,27 +2,36 @@ import React, { Component } from "react";
 
 class Controle extends Component {
     state = {
-        descricao: "",
-        valor: "",
         quantidade1: "0,00",
         quantidade2: "0,00",
         total: "0,00",
-        entrada: false,
-        saida: false,
-        btnAdicionar: false,
     };
 
     handleChange = (event) => {
-        const { name, value } = event.target;
-        this.setState({ [name]: value });
+        const { name, value, type, checked } = event.target;
+        this.setState({ [name]: type === "checkbox" ? checked : value });
     };
+
+    handleRadioChange = (event) => {
+        const { value } = event.target;
+        this.setState({ 
+            entrada: value === "entrada",
+            saida: value === "saida"
+         });
+    }
 
     handleAddClick = (event) => {
         event.preventDefault();
-        this.setState((prevState) => ({
-            quantidade1: prevState.valor.trim() ? prevState.valor : "0,00",
-            valor: ""
-        }));
+        this.setState((prevState) => {
+            let valorAtualizado =  prevState.valor.trim() ? prevState.valor : "0,00"
+            if (prevState.saida) {
+                valorAtualizado = prevState.valor.trim() ? - prevState.valor : "0,00"
+            }
+            return {
+                quantidade1: valorAtualizado,
+                valor: "",
+            }
+        });
     };
 
     render() {
@@ -66,7 +75,7 @@ class Controle extends Component {
                         type="radio"
                         name="input"
                         value="entrada"
-                        onChange={this.handleChange}
+                        onChange={this.handleRadioChange}
                     />
                     <label htmlFor="saida">Saída</label>
                     <input
@@ -74,7 +83,7 @@ class Controle extends Component {
                         type="radio"
                         name="input"
                         value="saida"
-                        onChange={this.handleChange}
+                        onChange={this.handleRadioChange}
                     />
                     <button
                         id="btn-adicionar"
