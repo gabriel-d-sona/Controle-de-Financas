@@ -1,5 +1,68 @@
-*{
+
+.controle-page {
+  background-color: gainsboro;
+  width: 80%;
+  height: 895px;
+  padding: 20px;
+}
+.tabela-total {
+  background-color: teal;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: white;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 40px
+}
+.div {
+  background-color: gainsboro;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  flex: 1;
+  max-width: 200px;
+}
+
+.div label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.div h2 {
   margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+}
+
+.form-container {
+  display: flex;
+  gap: 30px
+}
+
+.form {
+  padding: 10px;
+  flex: 1;
+}
+
+.table {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.th {
+  flex: 1;
+  text-align: center;
+  min-width: 100px;
 }

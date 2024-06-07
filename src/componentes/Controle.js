@@ -1,4 +1,5 @@
 import React from "react";
+import Lixeira from "../imagens/lixeira-de-reciclagem.png"
 
 class Controle extends React.Component {
     state = {
@@ -90,68 +91,76 @@ class Controle extends React.Component {
         return (
             <div className="controle-page">
                 <div className="tabela-total">
-                    <h1>Controle de Finanças</h1>
-                    <label className="entrada">Entradas</label>
-                    <h2 name="quantidade1" value={quantidade1}>
-                        {quantidade1}
-                    </h2>
-                    <label className="saidas">Saídas</label>
-                    <h2>{quantidade2}</h2>
-                    <label className="total">Total</label>
-                    <h2>{total}</h2>
+                    <h1 className="title">Controle de Finanças</h1>
+                    <div className="container">
+                        <div className="div">
+                            <label>Entradas</label>
+                            <h2>{quantidade1}</h2>
+                        </div>
+                        <div className="div">            
+                            <label>Saídas</label>
+                            <h2>{quantidade2}</h2>
+                        </div>
+                        <div className="div">
+                            <label>Total</label>
+                            <h2>{total}</h2>
+                        </div>
+                    </div>
                 </div>
-                <form>
-                    <label htmlFor="descricao">Descrição</label>
-                    <input
-                        id="descricao"
-                        type="text"
-                        name="descricao"
-                        value={descricao}
-                        onChange={this.handleChange}
-                    />
-                    <label htmlFor="valor">Valor</label>
-                    <input
-                        id="valor"
-                        type="number"
-                        name="valor"
-                        value={valor}
-                        onChange={this.handleChange}
-                    />
-                    <label htmlFor="entrada">Entrada</label>
-                    <input
-                        id="entrada"
-                        type="radio"
-                        name="input"
-                        value="entrada"
-                        onChange={this.handleRadioChange}
-                        checked={this.state.entrada}
-                    />
-                    <label htmlFor="saida">Saída</label>
-                    <input
-                        id="saida"
-                        type="radio"
-                        name="input"
-                        value="saida"
-                        onChange={this.handleRadioChange}
-                        checked={this.state.saida}
-                    />
-                    <button
-                        id="btn-adicionar"
-                        name="btn-adicionar"
-                        disabled={btnDisable}
-                        onClick={this.handleAddClick}
-                    >
-                        Adicionar
-                    </button>
-                </form>
+                <div className="form-container">
+                    <form className="form">
+                        <label htmlFor="descricao">Descrição</label>
+                        <input
+                            id="descricao"
+                            type="text"
+                            name="descricao"
+                            value={descricao}
+                            onChange={this.handleChange}
+                        />
+                        <label htmlFor="valor">Valor</label>
+                        <input
+                            id="valor"
+                            type="number"
+                            name="valor"
+                            value={valor}
+                            onChange={this.handleChange}
+                        />
+                        <label htmlFor="entrada">Entrada</label>
+                        <input
+                            id="entrada"
+                            type="radio"
+                            name="input"
+                            value="entrada"
+                            onChange={this.handleRadioChange}
+                            checked={this.state.entrada}
+                        />
+                        <label htmlFor="saida">Saída</label>
+                        <input
+                            id="saida"
+                            type="radio"
+                            name="input"
+                            value="saida"
+                            onChange={this.handleRadioChange}
+                            checked={this.state.saida}
+                        />
+                        <button
+                            id="btn-adicionar"
+                            name="btn-adicionar"
+                            disabled={btnDisable}
+                            onClick={this.handleAddClick}
+                        >
+                            Adicionar
+                        </button>
+                    </form>
+                </div>
                 <div className="table">
                     <table>
                         <thead>
                             <tr>
-                                <th>Descrição</th>
-                                <th>Valor</th>
-                                <th>Tipo</th>
-                                <th></th>
+                                <th className="th">Descrição</th>
+                                <th className="th">Valor</th>
+                                <th className="th">Tipo</th>
+                                <th className="th">Excluir</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -161,15 +170,16 @@ class Controle extends React.Component {
                                     <td>{item.valor}</td>
                                     <td>{item.tipo}</td>
                                     <td>
-                                        <button
-                                            onClick={() => {
-                                                const newArr = arr.filter((_, i) => i !== index);
-                                                this.setState({ arr: newArr }, this.updateQuantities);
-                                                localStorage.setItem("meuArr", JSON.stringify(newArr));
-                                            }}
-                                        >
-                                            Excluir
-                                        </button>
+                                    <button 
+                                        onClick={() => {
+                                        const newArr = arr.filter((_, i) => i !== index);
+                                        this.setState({ arr: newArr }, () => {
+                                        this.updateQuantities();
+                                        localStorage.setItem("meuArr", JSON.stringify(newArr));
+                                        });
+                                        }}>
+                                        <img src={Lixeira} alt="Lixeira" width="20" height="20" />
+                                    </button>
                                     </td>
                                 </tr>
                             ))}
