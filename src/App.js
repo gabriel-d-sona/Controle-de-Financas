@@ -1,9 +1,15 @@
-import Controle from "./pages/Controle";
+import React from "react";
+import { Route, Routes, BrowserRouter as Router} from 'react-router-dom';
+import Login from "./pages/Login";
+import Financas from "./pages/Financas";
 function App() {
   return (
-    <div className="App">
-      <Controle />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} /> 
+        <Route path="/financas" element={<Financas />} />
+      </Routes>
+    </Router>
   );
 }
 

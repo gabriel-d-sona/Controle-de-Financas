@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Controle extends Component {
+class Controle extends React.Component {
     state = {
         descricao: "",
         valor: "",
@@ -42,7 +42,7 @@ class Controle extends Component {
         });
     }
 
-//click do botao
+// Click do botao
     handleAddClick = (event) => {
         event.preventDefault();
         this.setState((prevState) => {
@@ -65,7 +65,7 @@ class Controle extends Component {
         }, this.updateQuantities);
     };
 
-//da valor e diferencia texto de checkbox
+// Da valor e diferencia texto de checkbox
     handleChange = (event) => {
         const { name, value, type, checked } = event.target;
         this.setState({ [name]: type === "checkbox" ? checked : value });
@@ -76,7 +76,7 @@ class Controle extends Component {
         })
     };
 
-//diferencia as checkbox
+// Diferencia as checkbox
     handleRadioChange = (event) => {
         const { value } = event.target;
         this.setState({
